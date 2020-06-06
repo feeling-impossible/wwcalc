@@ -1,47 +1,36 @@
 import React from "react";
-
-let fractions = [...Array(32)].map((x, i) => i / 32);
-// console.log(fractions);
+import Utils from "../Utils";
 
 class Decimal2Fraction extends React.Component {
-  d2f({ target }) {
-    if (!target.value.match(/\d+\.?\d*/)) return;
-
-    let fractionDiv = document.getElementById("fraction");
-    let errorDiv = document.getElementById("error");
-    let value = target.value;
-    let number = Math.floor(value);
-    let decimal = round5(value % 1);
-    // console.log(number + decimal);
-
-    number = number ? number : "";
-
-    // let neighbors = fractions.filter((x,i))
-    let fraction = reduce(
-      fractions.indexOf(
-        fractions.reduce((prev, curr) =>
-          Math.abs(curr - decimal) < Math.abs(prev - decimal) ? curr : prev
-        )
-      ),
-      32
-    );
-    // console.log(fraction);
-
-    fractionDiv.textContent = `${number} ${fraction[0]}/${fraction[1]}`;
-    errorDiv.textContent = round3(value - (number + fraction[0] / fraction[1]));
+  constructor(props) {
+    super(props);
+    this.state = {
+      decimal: undefined,
+      fraction: undefined,
+      error: undefined,
+    };
+    this.onChange = this.onChange.bind(this);
+    // this.onInputChange = this.onInputChange.bind(this);
+    // this.onDivisionsChange = this.onDivisionsChange.bind(this);
+  }
+  onInputChange({ target }) {
+    this.setState(Utils.d2f(target.value, this.state.divisions));
+  }
+  onDivisionsChange({ target }) {
+    this.setState({ divisions: target.value });
+  }
+  onChange() {
+    let divisions = document.getElementById("divisions").value;
+    let value = document.getElementById("value").value;
+    this.setState(Utils.d2f(value, divisions));
   }
   render() {
     let style = { width: "100px" };
     return (
       <div className="mx-auto">
-        <div className="my-3">Decimal to Fraction</div>
-        {/* <div className="flex">
-          <div>
-            <input className="textCenter" onChange={this.d2f} style={style} />
-          </div>
-          <div id="fraction" className="ml-2 px-2 border" style={style}></div>
-          <div id="error" className="ml-2 px-2 border" style={style}></div>
-        </div> */}
+        <div className="my-3">
+          <h3>Round to Fraction</h3>
+        </div>
         <table
           style={{
             borderCollapse: "separate",
@@ -50,24 +39,43 @@ class Decimal2Fraction extends React.Component {
         >
           <tbody>
             <tr>
-              <td style={style}>Decimal</td>
+              <td style={style}>Round</td>
+              <td style={style}>&nbsp;</td>
               <td style={style}>Fraction</td>
-              <td style={style}>Error</td>
+              <td style={style}>Decimal</td>
+              <td style={style}>Difference</td>
             </tr>
             <tr>
               <td>
+                <select
+                  id="divisions"
+                  defaultValue={32}
+                  onChange={this.onChange}
+                  style={style}
+                >
+                  {[64, 32, 16, 8, 4].map((value) => {
+                    return (
+                      <option className="textCenter" key={value} value={value}>
+                        {value}
+                        {value.toString().match(/2$/) ? "nd" : "th"}
+                      </option>
+                    );
+                  })}
+                </select>
+              </td>
+              <td>
                 <input
+                  id="value"
                   className="textCenter"
-                  onChange={this.d2f}
+                  onChange={this.onChange}
                   style={style}
                 />
               </td>
-              <td id="fraction" className="border">
-                &nbsp;
+              <td className="border">{this.state.fraction || ""}</td>
+              <td className="border">
+                {Utils.round3(this.state.decimal) || ""}
               </td>
-              <td id="error" className="border">
-                &nbsp;
-              </td>
+              <td className="border">{Utils.round3(this.state.error) || ""}</td>
             </tr>
           </tbody>
         </table>
@@ -77,19 +85,3 @@ class Decimal2Fraction extends React.Component {
 }
 
 export default Decimal2Fraction;
-
-function round3(value) {
-  return Math.round(value * 1000) / 1000;
-}
-
-function round5(value) {
-  return Math.round(value * 100000) / 100000;
-}
-
-function reduce(numerator, denominator) {
-  var gcd = function gcd(a, b) {
-    return b ? gcd(b, a % b) : a;
-  };
-  gcd = gcd(numerator, denominator);
-  return [numerator / gcd, denominator / gcd];
-}

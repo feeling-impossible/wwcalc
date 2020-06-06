@@ -10,14 +10,6 @@ class Decimal2Fraction extends React.Component {
       error: undefined,
     };
     this.onChange = this.onChange.bind(this);
-    // this.onInputChange = this.onInputChange.bind(this);
-    // this.onDivisionsChange = this.onDivisionsChange.bind(this);
-  }
-  onInputChange({ target }) {
-    this.setState(Utils.d2f(target.value, this.state.divisions));
-  }
-  onDivisionsChange({ target }) {
-    this.setState({ divisions: target.value });
   }
   onChange() {
     let divisions = document.getElementById("divisions").value;

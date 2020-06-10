@@ -93,6 +93,7 @@ class Calculator extends React.Component {
               <thead>
                 <tr className="border-bottom">
                   <td className="w-100 textCenter">&nbsp;</td>
+                  <td className="px-2 textCenter">Real</td>
                   <td className="px-2 textCenter">Fraction</td>
                   <td className="px-2 textCenter">Decimal</td>
                   <td className="px-2 textCenter">Error</td>
@@ -102,6 +103,7 @@ class Calculator extends React.Component {
                 {this.state.history.map((row, i) => (
                   <tr className="noWrap" key={i}>
                     <td className="px-4 textRight">{row.function}</td>
+                    <td className="px-2">{Utils.round3(row.real)}</td>
                     <td className="px-2">{row.fraction}</td>
                     <td className="px-2">{Utils.round3(row.decimal)}</td>
                     <td className="px-2">{Utils.round3(row.error)}</td>

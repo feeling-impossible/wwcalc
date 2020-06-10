@@ -6,6 +6,7 @@ Utils.d2f = function (value, divisions) {
   // console.log(typeof value, value);
   if (!value.toString().match(/^\d*\.?\d*$/))
     return {
+      real: value,
       decimal: undefined,
       fraction: undefined,
       error: undefined,
@@ -16,6 +17,7 @@ Utils.d2f = function (value, divisions) {
   let error = decimal - value;
 
   return {
+    real: value,
     decimal: decimal,
     fraction: fraction,
     error: error,

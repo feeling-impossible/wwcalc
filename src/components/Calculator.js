@@ -86,7 +86,7 @@ class Calculator extends React.Component {
       <div className="my-4 flex flexCol">
         <div className="mx-auto" style={{ minWidth: 500 }}>
           <div className="textCenter">
-            <h3>Fraction Calculator</h3>
+            <h3>Freedom Calculator</h3>
           </div>
           <div className="my-3 px-2 border" style={{ minHeight: 300 }}>
             <table style={{ width: "100%" }}>

@@ -1,5 +1,5 @@
 .App {
-  text-align: center;
+  /* text-align: center; */
 }
 
 .flex {
@@ -20,4 +20,8 @@
 
 .textRight {
   text-align: right;
+}
+
+.noWrap {
+  white-space: nowrap;
 }

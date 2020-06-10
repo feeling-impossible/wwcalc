@@ -3,7 +3,8 @@ var fracty = require("fracty");
 
 let Utils = {};
 Utils.d2f = function (value, divisions) {
-  if (!value.match(/^\d*\.?\d*$/))
+  // console.log(typeof value, value);
+  if (!value.toString().match(/^\d*\.?\d*$/))
     return {
       decimal: undefined,
       fraction: undefined,

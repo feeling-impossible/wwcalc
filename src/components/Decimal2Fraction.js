@@ -19,58 +19,69 @@ class Decimal2Fraction extends React.Component {
   render() {
     let style = { width: "100px" };
     return (
-      <div className="mx-auto">
-        <div className="my-3">
-          <h3>Round to Fraction</h3>
+      <div className="my-4 flex flexCol">
+        <div className="mx-auto">
+          <div className="textCenter">
+            <h3>Round to Fraction</h3>
+          </div>
+          <div className="my-3">
+            <table
+              style={{
+                borderCollapse: "separate",
+                borderSpacing: "10px 5px",
+                textAlign: "center",
+              }}
+            >
+              <tbody>
+                <tr>
+                  <td style={style}>Round</td>
+                  <td style={style}>&nbsp;</td>
+                  <td style={style}>Fraction</td>
+                  <td style={style}>Decimal</td>
+                  <td style={style}>Difference</td>
+                </tr>
+                <tr>
+                  <td>
+                    <select
+                      id="divisions"
+                      defaultValue={32}
+                      onChange={this.onChange}
+                      style={style}
+                    >
+                      {[64, 32, 16, 8, 4].map((value) => {
+                        return (
+                          <option
+                            className="textCenter"
+                            key={value}
+                            value={value}
+                          >
+                            {value}
+                            {value.toString().match(/2$/) ? "nd" : "th"}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </td>
+                  <td>
+                    <input
+                      id="value"
+                      className="textCenter"
+                      onChange={this.onChange}
+                      style={style}
+                    />
+                  </td>
+                  <td className="border">{this.state.fraction || ""}</td>
+                  <td className="border">
+                    {Utils.round3(this.state.decimal) || ""}
+                  </td>
+                  <td className="border">
+                    {Utils.round3(this.state.error) || ""}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-        <table
-          style={{
-            borderCollapse: "separate",
-            borderSpacing: "10px 5px",
-          }}
-        >
-          <tbody>
-            <tr>
-              <td style={style}>Round</td>
-              <td style={style}>&nbsp;</td>
-              <td style={style}>Fraction</td>
-              <td style={style}>Decimal</td>
-              <td style={style}>Difference</td>
-            </tr>
-            <tr>
-              <td>
-                <select
-                  id="divisions"
-                  defaultValue={32}
-                  onChange={this.onChange}
-                  style={style}
-                >
-                  {[64, 32, 16, 8, 4].map((value) => {
-                    return (
-                      <option className="textCenter" key={value} value={value}>
-                        {value}
-                        {value.toString().match(/2$/) ? "nd" : "th"}
-                      </option>
-                    );
-                  })}
-                </select>
-              </td>
-              <td>
-                <input
-                  id="value"
-                  className="textCenter"
-                  onChange={this.onChange}
-                  style={style}
-                />
-              </td>
-              <td className="border">{this.state.fraction || ""}</td>
-              <td className="border">
-                {Utils.round3(this.state.decimal) || ""}
-              </td>
-              <td className="border">{Utils.round3(this.state.error) || ""}</td>
-            </tr>
-          </tbody>
-        </table>
       </div>
     );
   }

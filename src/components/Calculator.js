@@ -58,7 +58,11 @@ class Calculator extends React.Component {
         this.setState({ index: this.state.index + 1 });
       return;
     } else if (e.key === "Enter" && e.target.value) {
-      let value = e.target.value;
+      let value = e.target.value
+        .replace(/\sin\s*/gi, " ")
+        .replace(/\s*([+\-/()])\s*/g, " $1 ")
+        .replace(/(\d+)\s+(\d+)\s*\/\s*(\d+)\s*/g, "($1+$2/$3) ");
+      // console.log(value);
       let decimal;
       try {
         // eslint-disable-next-line
@@ -75,6 +79,10 @@ class Calculator extends React.Component {
       this.historyPush(result);
       e.target.value = "";
     }
+    // } else {
+    //   e.target.value = e.target.value.replace(/\sin$/i, " ");
+    //   e.target.value = e.target.value.replace(/\d+ \d+\/\d+/g, "($1+$2/$3)");
+    // }
   }
   historyPush(data) {
     let history = this.state.history;

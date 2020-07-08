@@ -1,28 +1,8 @@
 import React from "react";
 import Utils from "../Utils";
+import Help from "./Help";
 
-// let testData = [
-//   {
-//     decimal: 1.09375,
-//     error: -0.006250000000000089,
-//     fraction: "1 3/32",
-//     function: "1.1",
-//   },
-//   {
-//     decimal: 1.1875,
-//     error: -0.012499999999999956,
-//     fraction: "1 3/16",
-//     function: "1.2",
-//   },
-//   {
-//     decimal: 1.3125,
-//     error: 0.012499999999999956,
-//     fraction: "1 5/16",
-//     function: "1.3",
-//   },
-// ];
-
-var defaultInput = "Input Here. Use the enter key to submit. Example: 11/3";
+var defaultInput = "Math goes here. Enter to submit. Example: 11/3";
 
 class Calculator extends React.Component {
   constructor(props) {
@@ -32,10 +12,12 @@ class Calculator extends React.Component {
       history: [],
       index: 0,
       input: defaultInput,
+      help: false,
     };
     this.onKeyUp = this.onKeyUp.bind(this);
     this.onFocus = this.onFocus.bind(this);
     this.historyPush = this.historyPush.bind(this);
+    this.toggleHelp = this.toggleHelp.bind(this);
   }
   componentDidUpdate() {
     this.scrollDown();
@@ -44,16 +26,13 @@ class Calculator extends React.Component {
     if (e.target.value === defaultInput) e.target.value = "";
   }
   onKeyUp(e) {
-    // console.log(e.key);
     if (e.key === "ArrowUp") {
-      // console.log("up:", this.state.index);
       e.target.value = this.state.history[this.state.index - 1]
         ? this.state.history[this.state.index - 1].function
         : "";
       if (this.state.index >= 0) this.setState({ index: this.state.index - 1 });
       return;
     } else if (e.key === "ArrowDown") {
-      // console.log("down:", this.state.index);
       e.target.value = this.state.history[this.state.index + 1]
         ? this.state.history[this.state.index + 1].function
         : "";
@@ -76,7 +55,6 @@ class Calculator extends React.Component {
       }
 
       let result = Utils.d2f(decimal, this.state.divisions);
-      // console.log(result);
       result.function = value;
 
       this.historyPush(result);
@@ -91,6 +69,9 @@ class Calculator extends React.Component {
   scrollDown() {
     let historyDiv = document.getElementById("history");
     historyDiv.scrollTop = historyDiv.scrollHeight;
+  }
+  toggleHelp() {
+    this.setState({ help: !this.state.help });
   }
   render() {
     return (
@@ -129,15 +110,30 @@ class Calculator extends React.Component {
               </tbody>
             </table>
           </div>
-          <div className="my-3">
-            <input
-              style={{ width: "100%" }}
-              defaultValue={this.state.input}
-              onKeyUp={this.onKeyUp}
-              onFocus={this.onFocus}
-            ></input>
+          <div className="my-3 flex">
+            <div className="mr-1 grow">
+              <input
+                style={{ width: "100%" }}
+                defaultValue={this.state.input}
+                onKeyUp={this.onKeyUp}
+                onFocus={this.onFocus}
+              ></input>
+            </div>
+            <div
+              onClick={this.toggleHelp}
+              className="pointer textCenter text-white bg-primary border border-secondary rounded-circle"
+              style={{
+                width: 30,
+                height: 30,
+                fontSize: "1.5em",
+                lineHeight: "1.1em",
+              }}
+            >
+              ?
+            </div>
           </div>
         </div>
+        {this.state.help && <Help toggleHelp={this.toggleHelp} />}
       </div>
     );
   }

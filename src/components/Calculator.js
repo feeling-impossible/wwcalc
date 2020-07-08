@@ -37,6 +37,9 @@ class Calculator extends React.Component {
     this.onFocus = this.onFocus.bind(this);
     this.historyPush = this.historyPush.bind(this);
   }
+  componentDidUpdate() {
+    this.scrollDown();
+  }
   onFocus(e) {
     if (e.target.value === defaultInput) e.target.value = "";
   }
@@ -79,32 +82,34 @@ class Calculator extends React.Component {
       this.historyPush(result);
       e.target.value = "";
     }
-    // } else {
-    //   e.target.value = e.target.value.replace(/\sin$/i, " ");
-    //   e.target.value = e.target.value.replace(/\d+ \d+\/\d+/g, "($1+$2/$3)");
-    // }
   }
   historyPush(data) {
     let history = this.state.history;
     history.push(data);
     this.setState({ history: history, index: history.length });
   }
+  scrollDown() {
+    let historyDiv = document.getElementById("history");
+    historyDiv.scrollTop = historyDiv.scrollHeight;
+  }
   render() {
     return (
-      <div className="my-4 flex flexCol">
-        <div className="mx-auto" style={{ minWidth: 500 }}>
-          <div className="textCenter">
-            <h3>Freedom Calculator</h3>
-          </div>
-          <div className="my-3 px-2 border" style={{ minHeight: 300 }}>
+      <div className="h-100 flex">
+        <div className="mx-auto flex flexCol" style={{ minWidth: 500 }}>
+          <div className="header border border-secondary">Freedom Calc</div>
+          <div
+            id="history"
+            onLoad={this.scrollDown}
+            className="mt-3 px-2 grow scroll"
+          >
             <table style={{ width: "100%" }}>
               <thead>
                 <tr className="border-bottom">
                   <td className="w-100 textCenter">&nbsp;</td>
                   <td className="px-2 textCenter">Real</td>
-                  <td className="px-2 textCenter">Fraction</td>
                   <td className="px-2 textCenter">Decimal</td>
                   <td className="px-2 textCenter">Error</td>
+                  <td className="px-2 textCenter">Fraction</td>
                 </tr>
               </thead>
               <tbody>
@@ -112,15 +117,15 @@ class Calculator extends React.Component {
                   <tr className="noWrap" key={i}>
                     <td className="px-4 textRight">{row.function}</td>
                     <td className="px-2">{Utils.round3(row.real)}</td>
-                    <td className="px-2">{row.fraction}</td>
                     <td className="px-2">{Utils.round3(row.decimal)}</td>
                     <td className="px-2">{Utils.round3(row.error)}</td>
+                    <td className="px-2">{row.fraction}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <div className="mb-3">
+          <div className="my-3">
             <input
               style={{ width: "100%" }}
               defaultValue={this.state.input}

@@ -10,8 +10,17 @@
   flex-direction: column;
 }
 
+.flexRow {
+  flex-direction: column;
+}
+
 .grow {
-  flex: 1;
+  flex-grow: 1;
+}
+
+.scroll {
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .textCenter {
@@ -24,4 +33,16 @@
 
 .noWrap {
   white-space: nowrap;
+}
+
+.header {
+  width: 500px;
+  height: 100px;
+  line-height: 95px;
+  background-image: url("/images/header.jpg");
+  color: white;
+  text-align: center;
+  text-shadow: 0 0 30px black, 0 0 30px black, 0 0 30px black, 0 0 30px black;
+  font-size: 3em;
+  font-weight: bold;
 }

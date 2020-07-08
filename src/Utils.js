@@ -1,10 +1,8 @@
-// import React from "react";
 var fracty = require("fracty");
 
 let Utils = {};
 Utils.d2f = function (value, divisions) {
-  // console.log(typeof value, value);
-  if (!value.toString().match(/^\d*\.?\d*$/))
+  if (!value.toString().match(/^-?\d*\.?\d*$/))
     return {
       real: value,
       decimal: undefined,

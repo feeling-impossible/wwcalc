@@ -22,7 +22,7 @@ import Utils from "../Utils";
 //   },
 // ];
 
-var defaultInput = "Input Here. Use the enter key to submit. Example: 6.75/4";
+var defaultInput = "Input Here. Use the enter key to submit. Example: 11/3";
 
 class Calculator extends React.Component {
   constructor(props) {
@@ -63,9 +63,8 @@ class Calculator extends React.Component {
     } else if (e.key === "Enter" && e.target.value) {
       let value = e.target.value
         .replace(/\sin\s*/gi, " ")
-        .replace(/\s*([+\-/()])\s*/g, " $1 ")
+        .replace(/\s*([+*\-/()])\s*/g, " $1 ")
         .replace(/(\d+)\s+(\d+)\s*\/\s*(\d+)\s*/g, "($1+$2/$3) ");
-      // console.log(value);
       let decimal;
       try {
         // eslint-disable-next-line
@@ -77,6 +76,7 @@ class Calculator extends React.Component {
       }
 
       let result = Utils.d2f(decimal, this.state.divisions);
+      // console.log(result);
       result.function = value;
 
       this.historyPush(result);
@@ -100,26 +100,30 @@ class Calculator extends React.Component {
           <div
             id="history"
             onLoad={this.scrollDown}
-            className="mt-3 px-2 grow scroll"
+            className="mt-3 px-2 grow scroll border"
           >
             <table style={{ width: "100%" }}>
               <thead>
                 <tr className="border-bottom">
                   <td className="w-100 textCenter">&nbsp;</td>
-                  <td className="px-2 textCenter">Real</td>
-                  <td className="px-2 textCenter">Decimal</td>
+                  <td className="px-2 textCenter border-right">Real</td>
+                  <td className="px-2 textCenter border-right">Fraction</td>
+                  {/* <td className="px-2 textCenter">Decimal</td> */}
                   <td className="px-2 textCenter">Error</td>
-                  <td className="px-2 textCenter">Fraction</td>
                 </tr>
               </thead>
               <tbody>
                 {this.state.history.map((row, i) => (
                   <tr className="noWrap" key={i}>
                     <td className="px-4 textRight">{row.function}</td>
-                    <td className="px-2">{Utils.round3(row.real)}</td>
-                    <td className="px-2">{Utils.round3(row.decimal)}</td>
+                    <td className="px-2 border-right">
+                      {Utils.round3(row.real)}
+                    </td>
+                    <td className="px-2  border-right bg-light">
+                      {row.fraction}
+                    </td>
+                    {/* <td className="px-2">{Utils.round3(row.decimal)}</td> */}
                     <td className="px-2">{Utils.round3(row.error)}</td>
-                    <td className="px-2">{row.fraction}</td>
                   </tr>
                 ))}
               </tbody>

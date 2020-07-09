@@ -1,77 +1,38 @@
 import React from "react";
 import Utils from "../Utils";
-import Help from "./Help";
-
-var defaultInput = "Math goes here. Enter to submit. Example: 11/3";
+import Input from "./Input";
 
 class Calculator extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      divisions: 32,
       history: [],
       index: 0,
-      input: defaultInput,
-      help: false,
     };
-    this.onKeyUp = this.onKeyUp.bind(this);
-    this.onFocus = this.onFocus.bind(this);
     this.historyPush = this.historyPush.bind(this);
-    this.toggleHelp = this.toggleHelp.bind(this);
+    this.clearHistory = this.clearHistory.bind(this);
+    this.historyUp = this.historyUp.bind(this);
+    this.historyDown = this.historyDown.bind(this);
   }
   componentDidUpdate() {
-    this.scrollDown();
-  }
-  onFocus(e) {
-    if (e.target.value === defaultInput) e.target.value = "";
-  }
-  onKeyUp(e) {
-    if (e.key === "ArrowUp") {
-      e.target.value = this.state.history[this.state.index - 1]
-        ? this.state.history[this.state.index - 1].function
-        : "";
-      if (this.state.index >= 0) this.setState({ index: this.state.index - 1 });
-      return;
-    } else if (e.key === "ArrowDown") {
-      e.target.value = this.state.history[this.state.index + 1]
-        ? this.state.history[this.state.index + 1].function
-        : "";
-      if (this.state.index < this.state.history.length)
-        this.setState({ index: this.state.index + 1 });
-      return;
-    } else if (e.key === "Enter" && e.target.value) {
-      let value = e.target.value
-        .replace(/\sin\s*/gi, " ")
-        .replace(/\s*([+*\-/()])\s*/g, " $1 ")
-        .replace(/(\d+)\s+(\d+)\s*\/\s*(\d+)\s*/g, "($1+$2/$3) ");
-      let decimal;
-      try {
-        // eslint-disable-next-line
-        decimal = eval(value);
-        e.target.style.color = "black";
-      } catch {
-        e.target.style.color = "red";
-        return;
-      }
-
-      let result = Utils.d2f(decimal, this.state.divisions);
-      result.function = value;
-
-      this.historyPush(result);
-      e.target.value = "";
-    }
+    //scroll to bottom of history div
+    let historyDiv = document.getElementById("history");
+    historyDiv.scrollTop = historyDiv.scrollHeight;
   }
   historyPush(data) {
     let history = this.state.history;
     history.push(data);
     this.setState({ history: history, index: history.length });
   }
-  scrollDown() {
-    let historyDiv = document.getElementById("history");
-    historyDiv.scrollTop = historyDiv.scrollHeight;
+  historyUp(e) {
+    if (this.state.index >= 0) this.setState({ index: this.state.index - 1 });
   }
-  toggleHelp() {
-    this.setState({ help: !this.state.help });
+  historyDown(e) {
+    if (this.state.index < this.state.history.length)
+      this.setState({ index: this.state.index + 1 });
+  }
+  clearHistory() {
+    this.setState({ history: [], index: 0 });
   }
   render() {
     return (
@@ -110,30 +71,15 @@ class Calculator extends React.Component {
               </tbody>
             </table>
           </div>
-          <div className="my-3 flex">
-            <div className="mr-1 grow">
-              <input
-                style={{ width: "100%" }}
-                defaultValue={this.state.input}
-                onKeyUp={this.onKeyUp}
-                onFocus={this.onFocus}
-              ></input>
-            </div>
-            <div
-              onClick={this.toggleHelp}
-              className="pointer textCenter text-white bg-primary border border-secondary rounded-circle"
-              style={{
-                width: 30,
-                height: 30,
-                fontSize: "1.5em",
-                lineHeight: "1.1em",
-              }}
-            >
-              ?
-            </div>
-          </div>
+          <Input
+            index={this.state.index}
+            history={this.state.history}
+            historyPush={this.historyPush}
+            clearHistory={this.clearHistory}
+            historyUp={this.historyUp}
+            historyDown={this.historyDown}
+          />
         </div>
-        {this.state.help && <Help toggleHelp={this.toggleHelp} />}
       </div>
     );
   }

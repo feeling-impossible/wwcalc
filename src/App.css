@@ -59,3 +59,9 @@
 .fontSmaller {
   font-size: smaller;
 }
+.button {
+  width: 30px;
+  height: 30px;
+  font-size: 1.5em;
+  line-height: 1.1em;
+}

@@ -37,7 +37,11 @@ class Help extends React.Component {
           </p>
           <p>
             Example: If you want to subtract 2 from the previous answer, just
-            hit the up arrow, type "-2", and hit enter.
+            hit the down arrow, type "-2", and hit enter.
+          </p>
+          <p>
+            You can also click on items in the results to have them added to
+            your input.
           </p>
         </div>
       </div>

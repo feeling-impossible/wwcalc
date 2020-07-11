@@ -19,6 +19,9 @@ class Input extends React.Component {
     this.toggleAbout = this.toggleAbout.bind(this);
     this.divisionChange = this.divisionChange.bind(this);
   }
+  componentDidMount() {
+    document.getElementById("input").focus();
+  }
   toggleHelp() {
     this.setState({ help: !this.state.help });
   }
@@ -29,13 +32,13 @@ class Input extends React.Component {
     if (e.target.value === defaultInput) e.target.value = "";
   }
   onKeyUp(e) {
-    if (e.key === "ArrowUp") {
+    if (e.key === "ArrowDown") {
       e.target.value = this.props.history[this.props.index - 1]
         ? this.props.history[this.props.index - 1].function
         : "";
       this.props.historyUp();
       return;
-    } else if (e.key === "ArrowDown") {
+    } else if (e.key === "ArrowUp") {
       e.target.value = this.props.history[this.props.index + 1]
         ? this.props.history[this.props.index + 1].function
         : "";
@@ -64,14 +67,14 @@ class Input extends React.Component {
     }
   }
   divisionChange(e) {
-    // console.log("divisionChange:", e.target.value);
     this.setState({ divisions: e.target.value });
   }
   render() {
     return (
-      <div className="my-3 flex">
+      <div className="flex">
         <div className="mr-1 grow">
           <input
+            id="input"
             style={{ width: "100%" }}
             defaultValue={this.state.input}
             onKeyUp={this.onKeyUp}

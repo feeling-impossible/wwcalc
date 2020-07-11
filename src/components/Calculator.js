@@ -14,11 +14,6 @@ class Calculator extends React.Component {
     this.historyUp = this.historyUp.bind(this);
     this.historyDown = this.historyDown.bind(this);
   }
-  componentDidUpdate() {
-    //scroll to bottom of history div
-    let historyDiv = document.getElementById("history");
-    historyDiv.scrollTop = historyDiv.scrollHeight;
-  }
   historyPush(data) {
     let history = this.state.history;
     history.push(data);
@@ -34,51 +29,71 @@ class Calculator extends React.Component {
   clearHistory() {
     this.setState({ history: [], index: 0 });
   }
+  onClick(e) {
+    let input = document.getElementById("input");
+    input.value = input.value + e.target.textContent;
+    input.focus();
+  }
   render() {
     return (
       <div className="h-100 flex">
         <div className="mx-auto flex flexCol" style={{ minWidth: 500 }}>
-          <div className="header border border-secondary">Freedom Calc</div>
-          <div
-            id="history"
-            onLoad={this.scrollDown}
-            className="mt-3 px-2 grow scroll border"
-          >
-            <table style={{ width: "100%" }}>
+          <div className="mb-1 header border border-secondary">
+            Freedom Calc
+          </div>
+          <div className="my-3">
+            <Input
+              index={this.state.index}
+              history={this.state.history}
+              historyPush={this.historyPush}
+              clearHistory={this.clearHistory}
+              historyUp={this.historyUp}
+              historyDown={this.historyDown}
+            />
+          </div>
+          {/* <div id="history" className="my-1 px-2 grow border"> */}
+          {this.state.history.length > 0 && (
+            <table className="my-1 px-2 border" style={{ width: "100%" }}>
               <thead>
                 <tr className="border-bottom">
-                  <td className="w-100 textCenter">&nbsp;</td>
-                  <td className="px-2 textCenter border-right">Real</td>
-                  <td className="px-2 textCenter border-right">Fraction</td>
-                  {/* <td className="px-2 textCenter">Decimal</td> */}
-                  <td className="px-2 textCenter">Error</td>
+                  <td className="px-4 w-100 textRight">Input</td>
+                  <td className="px-2 textRight border-right">Real</td>
+                  <td className="px-2 textRight border-right">Rounded</td>
+                  {/* <td className="px-2 textRight">Decimal</td> */}
+                  <td className="px-2 textRight">Diff</td>
                 </tr>
               </thead>
               <tbody>
-                {this.state.history.map((row, i) => (
-                  <tr className="noWrap" key={i}>
-                    <td className="px-4 textRight">{row.function}</td>
-                    <td className="px-2 border-right">
-                      {Utils.round3(row.real)}
-                    </td>
-                    <td className="px-2  border-right bg-light">
-                      {row.fraction}
-                    </td>
-                    {/* <td className="px-2">{Utils.round3(row.decimal)}</td> */}
-                    <td className="px-2">{Utils.round3(row.error)}</td>
-                  </tr>
-                ))}
+                {this.state.history
+                  .slice()
+                  .reverse()
+                  .map((row, i) => (
+                    <tr className="noWrap" key={i}>
+                      <td className="px-4 textRight" onClick={this.onClick}>
+                        {row.function}
+                      </td>
+                      <td
+                        className="px-2 textRight border-right"
+                        onClick={this.onClick}
+                      >
+                        {Utils.round3(row.real)}
+                      </td>
+                      <td
+                        className="px-2 textRight border-right bg-light"
+                        onClick={this.onClick}
+                      >
+                        {row.fraction}
+                      </td>
+                      {/* <td className="px-2">{Utils.round3(row.decimal)}</td> */}
+                      <td className="px-2 textRight" onClick={this.onClick}>
+                        {Utils.round3(row.error)}
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
-          </div>
-          <Input
-            index={this.state.index}
-            history={this.state.history}
-            historyPush={this.historyPush}
-            clearHistory={this.clearHistory}
-            historyUp={this.historyUp}
-            historyDown={this.historyDown}
-          />
+          )}
+          {/* </div> */}
         </div>
       </div>
     );
